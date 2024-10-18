@@ -1,0 +1,92 @@
+{
+	"info": {
+		"_postman_id": "f56cf770-ae54-4f8a-ba5d-b6f0b3b5bd8d",
+		"name": "BTPPCheckDispute",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28993764",
+		"_collection_link": "https://intebtpp.postman.co/workspace/PPBT~3ae85c72-293c-4fdf-8ad0-804b885d4960/collection/28993764-f56cf770-ae54-4f8a-ba5d-b6f0b3b5bd8d?action=share&source=collection_link&creator=28993764"
+	},
+	"item": [
+		{
+			"name": "Create Dispute",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"buyerTrx\": [\n        \"57B33410AL633261W\",\n        \"3XD2509525082880M\",\n        \"8L088363YU350914T\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/create-the-disputes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"create-the-disputes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Dispute created",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"caseNumbers\": [\"PP-R-XVW-10101436\", \"PP-R-XVW-10101439\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/search-disputes-created",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"search-disputes-created"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}

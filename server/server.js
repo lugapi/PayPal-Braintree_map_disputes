@@ -3,10 +3,11 @@ const axios = require('axios')
 const app = express();
 const path = require("path");
 
+app.use(express.json());
+
 app.set("view engine", "ejs");
 app.set("views", path.join("views"));
 
-app.use(express.json());
 app.use(express.static(__dirname + '/public')); // Servez les fichiers statiques à partir du répertoire public
 
 const { encodedJWT } = require('../utils');
@@ -70,6 +71,9 @@ app.post('/create-the-disputes', async (req, res) => {
 
 app.post('/search-disputes-created', async (req, res) => {
   const caseNumberList = req.body.caseNumbers;
+
+  console.log("Request body:", req.body);  // Ajoute cette ligne pour voir les données reçues
+  console.log("Request body caseNumbers:", req.body.caseNumbers);  // Ajoute cette ligne pour voir les données reçues
 
   // Vérifie que caseNumberList est bien défini
   if (!caseNumberList) {
@@ -236,16 +240,13 @@ async function createDisputeExec(trx, baerer, jwt, reason) {
 
 
 
-
-
-
 async function checkAndCreateDisputes(buyerTransactions) {
   // Détecte et sépare les transactions selon les virgules, espaces ou autres
   let buyerTrx = buyerTransactions.includes(",")
     ? buyerTransactions.split(',')
     : buyerTransactions.includes(" ")
       ? buyerTransactions.split(' ')
-      : [buyerTransactions];
+      : buyerTransactions;
 
   // Supprime les espaces inutiles
   buyerTrx = buyerTrx.map(trx => trx.trim());
@@ -320,8 +321,17 @@ async function checkAndCreateDisputes(buyerTransactions) {
 async function searchDisputesCreatedBasedOnCaseNumber(cases) {
   const lookup = [];
 
-  // cases devrait être une chaîne avec des numéros séparés par des virgules
-  const caseNumberList = cases.split(',');
+  let caseNumberList = ""
+  
+  // cases devrait être une chaîne avec des numéros séparés par des virgules (si elle est une chaîne) ou un objet JSON (si c'est l'API)
+  if (typeof cases === 'string') {
+    caseNumberList = cases.split(',');
+  } else if (typeof cases === 'object') {
+    // Si c'est un objet JSON, on récupère la liste des casNumbers directement
+    caseNumberList = Object.values(cases).map((value) => value);
+  } else {
+    throw new Error('Invalid input type');
+  }
 
   // Utilise `for...of` pour itérer sur caseNumberList avec async/await
   for (const caseNumber of caseNumberList) {
