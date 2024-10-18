@@ -224,11 +224,11 @@
 
                             const ppLink = lookup.PayPal_Dispute
                                 ? '<a class="disputeDetailLinks" href="' + ppResCenter + '" target="_blank">' + lookup.PayPal_Dispute + '</a>'
-                                : 'Aucun lien PayPal';
+                                : 'No corresponding PayPal dispute found (yet)';
 
                             const btLink = lookup.Braintree_Dispute
                                 ? '<a class="disputeDetailLinks" href="' + btDisputeView + '" target="_blank">' + lookup.Braintree_Dispute + '</a>'
-                                : 'Aucun lien Braintree';
+                                : 'No corresponding Braintree dispute found (yet)';
 
                             html += `
                     <div class="card ${lookup.Braintree_Dispute ? 'valid' : 'invalid'}">
