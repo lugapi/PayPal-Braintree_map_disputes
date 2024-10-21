@@ -13,5 +13,6 @@ module.exports = {
   clientID: process.env.PAYPAL_CLIENT_ID,
   secret: process.env.PAYPAL_SECRET,
   emailBuyer: process.env.PAYPAL_BUYER_EMAIL,
-  buyerToken: process.env.PAYPAL_BUYER_TOKEN
+  buyerToken: process.env.PAYPAL_BUYER_TOKEN,
+  baseOrderId: process.env.BASE_ORDERID
 };
