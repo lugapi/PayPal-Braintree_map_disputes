@@ -68,20 +68,23 @@ app.post('/create-the-disputes', async (req, res) => {
   }
 });
 
-app.post('/bt-webhook-decode', async (req, res) => {
+app.post('/search-disputes-created', async (req, res) => {
+  const caseNumberList = req.body.caseNumbers;
 
-  const webhookContent = req.body.webhookContent;
+  console.log("Request body:", req.body);  // Ajoute cette ligne pour voir les données reçues
+  console.log("Request body caseNumbers:", req.body.caseNumbers);  // Ajoute cette ligne pour voir les données reçues
 
-  if (!webhookContent) {
-    return res.status(400).send({ message: 'Missing information' });
+  // Vérifie que caseNumberList est bien défini
+  if (!caseNumberList) {
+    return res.status(400).send({ message: 'No case numbers provided' });
   }
 
   try {
-    const result = await webhookProcess(webhookContent);
+    const result = await searchDisputesCreatedBasedOnCaseNumber(caseNumberList);
     res.send(result); // Envoyer les résultats au front-end une fois la recherche terminée
   } catch (error) {
-    console.error('Error with webhook:', error);
-    res.status(500).send({ message: 'Error with webhook' });
+    console.error('Error during dispute search:', error);
+    res.status(500).send({ message: 'Error during dispute search' });
   }
 });
 
@@ -385,3 +388,9 @@ async function searchDisputesCreatedBasedOnCaseNumber(cases) {
   // Une fois toutes les recherches terminées, retourne le tableau lookup
   return lookup;
 }
+
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+  console.log(`Server started on port ${port}`);
+});
