@@ -23,9 +23,7 @@
 1. Run the following command to start the application: `npm start`
 2. Use the "Create Transactions" button to generate transactions in batch
 3. **USE A PAYMENT METHOD TOKEN TO CREATE TRANSACTIONS (BYPASSING FRONT-END MANAGEMENT)**
-
-## Transaction Token
-When creating a transaction, a token is generated and displayed in the console. This token can be used to retrieve transaction information.
+4. Use and install the Tampermonkey script (in the /tampermonkey folder) on the page https://www.sandbox.paypal.com/myaccount/activities to automatically get the buyer transaction IDs. 
 
 ## API REST
 The API REST is available on port 3000 (default). You can use tools like Postman or cURL to interact with the API.
