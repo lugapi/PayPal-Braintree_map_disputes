@@ -8,7 +8,7 @@ app.use(express.json());
 app.set("view engine", "ejs");
 app.set("views", path.join("views"));
 
-app.use(express.static(__dirname + '/public')); // Servez les fichiers statiques à partir du répertoire public
+app.use(express.static(__dirname + '/public'));
 
 const { encodedJWT } = require('../utils');
 const config = require('../config');
@@ -30,8 +30,6 @@ app.get('/', (req, res) => {
   res.render('index', {
     BTMID: process.env.BRAINTREE_MERCHANT_ID,
   });
-
-  // res.sendFile(__dirname + '/public/index.html');
 });
 /**
  * Loop through creating transactions based on input number
@@ -226,7 +224,7 @@ async function createDisputeExec(trx, baerer, jwt, reason) {
     const res = await axios(config);
     if (res.status === 201) {
       const responseBody = await res.data;
-      console.log('Dispute created successfully:', responseBody);
+      // console.log('Dispute created successfully:', responseBody);
       return responseBody;
     } else {
       console.log("fail to create dispute")
@@ -247,9 +245,6 @@ async function checkAndCreateDisputes(buyerTransactions) {
     : buyerTransactions.includes(" ")
       ? buyerTransactions.split(' ')
       : buyerTransactions;
-
-  // Supprime les espaces inutiles
-  buyerTrx = buyerTrx.map(trx => trx.trim());
 
   const responses = [];
 
@@ -295,14 +290,20 @@ async function checkAndCreateDisputes(buyerTransactions) {
   }
 
   // Si plusieurs transactions sont présentes, on map chaque transaction et attend la résolution des promesses
-  if (buyerTrx.length > 1) {
+  if (buyerTrx.length > 1 && typeof buyerTrx === "object") {
     console.log("Processing multiple transactions...");
+
+    // Supprime les espaces inutiles
+    buyerTrx = buyerTrx.map(trx => trx.trim());
+    // On supprime les guillemets
+    buyerTrx = buyerTrx.map(trx => trx.replace(/["']/g, ""));
+
     const promises = buyerTrx.map(transaction => processTransaction(transaction));
     await Promise.all(promises).then(res => responses.push(...res));
   } else {
     // Traitement d'une seule transaction
     console.log("Processing a single transaction...");
-    const singleResponse = await processTransaction(buyerTrx[0]);
+    const singleResponse = await processTransaction(buyerTrx);
     return singleResponse;  // Retourne directement si une seule transaction
   }
 
@@ -322,7 +323,7 @@ async function searchDisputesCreatedBasedOnCaseNumber(cases) {
   const lookup = [];
 
   let caseNumberList = ""
-  
+
   // cases devrait être une chaîne avec des numéros séparés par des virgules (si elle est une chaîne) ou un objet JSON (si c'est l'API)
   if (typeof cases === 'string') {
     caseNumberList = cases.split(',');
