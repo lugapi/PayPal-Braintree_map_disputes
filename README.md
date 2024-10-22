@@ -25,6 +25,14 @@
 3. **USE A PAYMENT METHOD TOKEN TO CREATE TRANSACTIONS (BYPASSING FRONT-END MANAGEMENT)**
 4. Use and install the Tampermonkey script (in the /tampermonkey folder) on the page https://www.sandbox.paypal.com/myaccount/activities to automatically get the buyer transaction IDs. 
 
+## TamperMoneky Script
+A Tampermonkey script is available to automatically get the buyer transaction ID from PayPal Sandbox.
+Please see [TamperMonkey ReadMe](external_resources/tampermonkey/README.md)
+
+## Automa workflow
+A Automa workflow is available to automate the creation of transactions in batch.
+Please see [Automa ReadMe](external_resources/automa/README.md)
+
 ## API REST
 The API REST is available on port 3000 (default). You can use tools like Postman or cURL to interact with the API.
 

@@ -19,8 +19,12 @@
         // Créer un tableau pour stocker les IDs extraits
         const transactionIDs = [];
 
+        // Créer un objet pour stocker les IDs extraits avec des clés uniques
+        const transactionData = {};
+
+
         // Parcourir les divs et extraire les IDs
-        divs.forEach(div => {
+        divs.forEach((div, index) => {
             // Trouver la classe qui contient l'ID de transaction
             const classList = div.className.split(' ');
 
@@ -28,14 +32,20 @@
             classList.forEach(className => {
                 const match = className.match(/js_transactionItem-(\w+)/);
                 if (match) {
+                    // Ajouter chaque ID avec une clé unique (trx1, trx2, etc.)
+                    transactionData[`trx${index + 1}`] = match[1];
                     transactionIDs.push(match[1]);
                 }
             });
         });
 
-        // Transformer le tableau en une chaîne de caractères avec les IDs séparés par des virgules
+        // Afficher l'objet JSON dans la console
+        console.log(JSON.stringify(transactionData, null, 2));
+
+        // Transformer l'objet en une chaîne de caractères avec les IDs séparés par des virgules
         const idsAsString = transactionIDs.join(',');
 
+        console.log(transactionIDs);
         // Afficher la chaîne de caractères dans la console
         console.log(idsAsString);
 

@@ -151,7 +151,7 @@
                     data: JSON.stringify({ number: $('#number').val() }),
                     contentType: 'application/json',
                     success: function (data) {
-                        $('#results').html('<p>Transactions lancées pour ' + $('#number').val() + ' fois</p>');
+                        $('#results').html('<p>' + $('#number').val() + ' transaction sale calls :</p>');
 
                         let html = '<ul>';
                         data.forEach(function (trx) {
