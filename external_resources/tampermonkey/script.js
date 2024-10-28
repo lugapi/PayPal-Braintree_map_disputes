@@ -32,8 +32,10 @@
             classList.forEach(className => {
                 const match = className.match(/js_transactionItem-(\w+)/);
                 if (match) {
-                    // Ajouter chaque ID avec une clé unique (trx1, trx2, etc.)
-                    transactionData[`trx${index + 1}`] = match[1];
+                    // Ajouter chaque ID comme clé et l'URL comme valeur
+                    const transactionID = match[1];
+                    transactionData[transactionID] = `https://www.sandbox.paypal.com/resolutioncenter/filing/${transactionID}`;
+//                    transactionData[`trx${index + 1}`] = match[1];
                     transactionIDs.push(match[1]);
                 }
             });

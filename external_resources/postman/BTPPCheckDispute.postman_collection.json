@@ -40,7 +40,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"caseNumbers\": [\"PP-R-XVW-10101436\", \"PP-R-XVW-10101439\"]\n}",
+					"raw": "{\n  \"caseNumbers\": [\"PP-R-EWN-10101804\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -54,6 +54,32 @@
 					],
 					"path": [
 						"search-disputes-created"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Dispute From PayPal",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"caseNumber\": \"PP-R-XBR-10101893\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/search-disputes-on-paypal",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"search-disputes-on-paypal"
 					]
 				}
 			},

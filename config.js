@@ -10,6 +10,7 @@ module.exports = {
     publicKey: process.env.BRAINTREE_PUBLIC_KEY,
     privateKey: process.env.BRAINTREE_PRIVATE_KEY
   }),
+  btMAID: process.env.BRAINTREE_MAID,
   clientID: process.env.PAYPAL_CLIENT_ID,
   secret: process.env.PAYPAL_SECRET,
   emailBuyer: process.env.PAYPAL_BUYER_EMAIL,

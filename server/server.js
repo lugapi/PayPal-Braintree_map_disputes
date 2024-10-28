@@ -19,7 +19,31 @@ const emailBuyer = config.emailBuyer;
 const baseOrderId = config.baseOrderId;
 const pmToken = config.buyerToken;
 const secret = config.secret;
+const MAID = config.btMAID;
 const baerer = Buffer.from(clientID + ':' + secret).toString('base64')
+
+
+// Fonction pour obtenir le token d'accès PayPal
+async function getAccessToken() {
+  const token = baerer;
+
+  try {
+    const response = await axios({
+      method: 'post',
+      url: 'https://api-m.sandbox.paypal.com/v1/oauth2/token',
+      headers: {
+        'Authorization': `Basic ${token}`,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: 'grant_type=client_credentials'
+    });
+
+    return response.data.access_token;
+  } catch (error) {
+    console.error("Erreur lors de l'obtention du token d'accès :", error);
+    throw error;
+  }
+}
 
 ////////////
 // ROUTES //
@@ -88,6 +112,25 @@ app.post('/search-disputes-created', async (req, res) => {
   }
 });
 
+app.post('/search-disputes-on-paypal', async (req, res) => {
+  const caseNumber = req.body.caseNumber;
+
+  console.log("Request body caseNumber:", req.body.caseNumber);  // Ajoute cette ligne pour voir les données reçues
+
+  // Vérifie que caseNumberList est bien défini
+  if (!caseNumber) {
+    return res.status(400).send({ message: 'No case number provided' });
+  }
+
+  try {
+    const result = await getDisputeDetails(caseNumber);
+    res.send(result); // Envoyer les résultats au front-end une fois la recherche terminée
+  } catch (error) {
+    console.error('Error during dispute search:', error);
+    res.status(500).send({ message: 'Error during dispute search' });
+  }
+});
+
 
 ///////////////
 // FUNCTIONS //
@@ -116,6 +159,7 @@ async function loopTransction(number) {
       const result = await new Promise((resolve, reject) => {
         gateway.transaction.sale({
           amount: amount.toFixed(2),
+          merchantAccountId: MAID,
           paymentMethodToken: pmToken,
           orderId: baseOrderId + Math.floor(Math.random() * 9999),
           options: {
@@ -388,6 +432,31 @@ async function searchDisputesCreatedBasedOnCaseNumber(cases) {
   // Une fois toutes les recherches terminées, retourne le tableau lookup
   return lookup;
 }
+
+
+// Fonction pour récupérer les détails d'un litige PayPal
+async function getDisputeDetails(disputeId) {
+  try {
+    const accessToken = await getAccessToken();
+
+    const response = await axios({
+      method: 'get',
+      url: `https://api-m.sandbox.paypal.com/v1/customer/disputes/${disputeId}`,
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+
+    // console.log("Détails du litige :", JSON.stringify(response.data, null, 2));
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des détails du litige :", error);
+    return {
+      errorMessage: `Error getting dispute details for id ${disputeId}`
+    }
+  }
+}
+
 
 const port = process.env.PORT || 3000;
 
