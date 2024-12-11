@@ -15,5 +15,7 @@ module.exports = {
   secret: process.env.PAYPAL_SECRET,
   emailBuyer: process.env.PAYPAL_BUYER_EMAIL,
   buyerToken: process.env.PAYPAL_BUYER_TOKEN,
-  baseOrderId: process.env.BASE_ORDERID
+  baseOrderId: process.env.BASE_ORDERID,
+  clientIDForDisputeCheck: process.env.PAYPAL_CLIENT_ID_FOR_PPDISPUTECHECK,
+  secretForDisputeCheck: process.env.PAYPAL_SECRET_FOR_PPDISPUTECHECK,
 };

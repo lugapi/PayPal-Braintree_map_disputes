@@ -20,19 +20,22 @@ const baseOrderId = config.baseOrderId;
 const pmToken = config.buyerToken;
 const secret = config.secret;
 const MAID = config.btMAID;
+const clientIDForDisputeCheck = config.clientIDForDisputeCheck;
+const secretForDisputeCheck = config.secretForDisputeCheck;
 const baerer = Buffer.from(clientID + ':' + secret).toString('base64')
+const baererForDisputeCheck = Buffer.from(clientIDForDisputeCheck + ':' + secretForDisputeCheck).toString('base64')
 
 
 // Fonction pour obtenir le token d'accès PayPal
-async function getAccessToken() {
-  const token = baerer;
+async function getAccessToken(bearer) {
+  // const token = baerer;
 
   try {
     const response = await axios({
       method: 'post',
       url: 'https://api-m.sandbox.paypal.com/v1/oauth2/token',
       headers: {
-        'Authorization': `Basic ${token}`,
+        'Authorization': `Basic ${bearer}`,
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       data: 'grant_type=client_credentials'
@@ -437,7 +440,7 @@ async function searchDisputesCreatedBasedOnCaseNumber(cases) {
 // Fonction pour récupérer les détails d'un litige PayPal
 async function getDisputeDetails(disputeId) {
   try {
-    const accessToken = await getAccessToken();
+    const accessToken = await getAccessToken(baererForDisputeCheck);
 
     const response = await axios({
       method: 'get',
